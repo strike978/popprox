@@ -1,5 +1,8 @@
 streamlit==1.38.0
 pandas==1.5.3
-numpy>=2.0.0  # Use a version compatible with Python 3.12
-scipy>=1.14.0  # Use the latest compatible version
+scipy>=1.10 
 scikit-learn==1.2.1
+plotly==5.16.1
+matplotlib==3.8.0
+setuptools>=58.0.4  # Ensure distutils is included
+wheel  # Also helps with package building
