@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from scipy.spatial.distance import (
-    braycurtis, cityblock, euclidean
+    braycurtis,  euclidean
 )
 
 # Load CSV data with specified encoding
@@ -28,7 +28,7 @@ user_coordinates = st.text_input(
 col1, col2 = st.columns([3, 1])
 with col1:
     distance_metric = st.selectbox('Select Distance Metric', [
-                                   'Bray-Curtis', 'Cityblock', 'Euclidean'])
+                                   'Bray-Curtis', 'Euclidean'])
 with col2:
     limit = st.number_input('Number of Closest Populations to Display',
                             min_value=1, max_value=len(populations)-1, value=10)
@@ -60,8 +60,6 @@ for i, population in enumerate(populations):
         continue
     if distance_metric == 'Bray-Curtis':
         dist = braycurtis(selected_data, numerical_data[i])
-    elif distance_metric == 'Cityblock':
-        dist = cityblock(selected_data, numerical_data[i])
     elif distance_metric == 'Euclidean':
         dist = euclidean(selected_data, numerical_data[i])
     distances.append((population, dist))
