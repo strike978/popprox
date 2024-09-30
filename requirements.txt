@@ -1,4 +1,5 @@
 streamlit==1.38.0
 pandas==1.5.3
-scipy>=1.10
-numpy==1.21.2
+numpy>=2.0.0  # Use a version compatible with Python 3.12
+scipy>=1.14.0  # Use the latest compatible version
+scikit-learn==1.2.1
