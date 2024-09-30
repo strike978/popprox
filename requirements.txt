@@ -1,7 +1,7 @@
 # Required packages for my project
 
 pandas==1.5.3
-scipy==1.10.0
+scipy==1.14.1
 scikit-learn==1.2.1
 plotly==5.16.1
 matplotlib==3.8.0
