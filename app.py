@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from scipy.spatial.distance import (
-    braycurtis,  euclidean
-)
+from scipy.spatial.distance import braycurtis
 
 # Load CSV data with specified encoding
 data = pd.read_csv('Modern Ancestry.txt', header=None, encoding='latin1')
@@ -21,15 +19,14 @@ st.title('PopProx')
 st.caption('Select One Population to Compare with Others')
 
 selected_population = st.selectbox('Select Population', populations, key='pop')
-use_custom_coordinates = st.checkbox('Use Custom Coordinates')
+use_custom_coordinates = st.checkbox('Use G25 Coordinates')
 user_coordinates = st.text_input(
-    'Enter Your Coordinates (comma-separated)', '')
+    'Enter Your G25 Coordinates (comma-separated)', '')
+population_name = user_coordinates.split(',')[0].strip()
+
 
 col1, col2 = st.columns([3, 1])
 with col1:
-    distance_metric = st.selectbox('Select Distance Metric', [
-                                   'Bray-Curtis', 'Euclidean'])
-with col2:
     limit = st.number_input('Number of Closest Populations to Display',
                             min_value=1, max_value=len(populations)-1, value=10)
 
@@ -45,11 +42,11 @@ if use_custom_coordinates:
                     "The number of coordinates entered does not match the expected number.")
             selected_data = user_coordinates
         except ValueError as e:
-            st.error(f"Invalid coordinates format: {
+            st.error(f"Invalid G25 coordinates format: {
                      e}. Please enter comma-separated numerical values.")
             st.stop()
     else:
-        st.error("Please enter your coordinates.")
+        st.error("Please enter your G25 coordinates.")
         st.stop()
 else:
     selected_data = numerical_data[index_selected]
@@ -58,17 +55,14 @@ distances = []
 for i, population in enumerate(populations):
     if not use_custom_coordinates and i == index_selected:
         continue
-    if distance_metric == 'Bray-Curtis':
-        dist = braycurtis(selected_data, numerical_data[i])
-    elif distance_metric == 'Euclidean':
-        dist = euclidean(selected_data, numerical_data[i])
+    dist = braycurtis(selected_data, numerical_data[i])
     distances.append((population, dist))
 
 distances.sort(key=lambda x: x[1])
 closest_populations = distances[:limit]
 
 st.write(f'The top {limit} populations closest to {
-         selected_population if not use_custom_coordinates else "your coordinates"} using {distance_metric} distance are:')
+         selected_population if not use_custom_coordinates else population_name}')
 table_data = [{"Population": population, "Percentage": f'{
     100 - (dist * 100):.2f}%'} for population, dist in closest_populations]
 st.table(table_data)
